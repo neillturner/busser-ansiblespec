@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ['neillwturner@gmail.com']
   spec.description   = %q{A Busser runner plugin for Ansiblespec}
   spec.summary       = spec.description
-  spec.homepage      = 'https://github.com/test-kitchen/busser-ansiblespec'
+  spec.homepage      = 'https://github.com/neillturner/busser-ansiblespec'
   spec.license       = 'Apache 2.0'
   candidates = Dir.glob("{lib}/**/*") +  ['gemfile', 'busser-ansiblespec.gemspec', 'LICENSE', 'Rakefile', 'README.md' ]
   spec.files = candidates.sort
