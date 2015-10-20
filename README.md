@@ -1,12 +1,14 @@
 # <a name="title"></a> Busser::RunnerPlugin::Ansiblespec
 
-[![Gem Version](https://badge.fury.io/rb/busser-serverspec.png)](http://rubygems.org/gems/busser-serverspec) [![Build Status](https://secure.travis-ci.org/test-kitchen/busser-serverspec.png?branch=master)](https://travis-ci.org/test-kitchen/busser-serverspec) [![Dependency Status](https://gemnasium.com/test-kitchen/busser-serverspec.png)](https://gemnasium.com/test-kitchen/busser-serverspec) [![Code Climate](https://codeclimate.com/github/cl-lab-k/busser-serverspec.png)](https://codeclimate.com/github/cl-lab-k/busser-serverspec)
+[![Gem Version](https://badge.fury.io/rb/busser-ansiblespec.png)](http://rubygems.org/gems/busser-ansiblespec)
+[![Gem Downloads](http://ruby-gem-downloads-badge.herokuapp.com/busser-ansiblespec?type=total&color=brightgreen)](https://rubygems.org/gems/busser-ansiblespec)
 
 A Busser runner plugin for Ansiblespec.
-This enables testing using the ansiblespec format
-See [ansible-sample-tdd](https://github.com/volanja/ansible-sample-tdd)
-This allows te tests to be specified with the roles in the ansible repository.
+
+This enables testing using the ansiblespec format. The serverspec tests are specified with the roles in the ansible repository.
 Also multple roles can be tested.
+
+See [ansible-sample-tdd](https://github.com/volanja/ansible-sample-tdd)
 
 ## <a name="installation"></a> Installation and Setup
 
@@ -14,11 +16,17 @@ Please read the Busser [plugin usage][plugin_usage] page for more details.
 
 ## <a name="usage"></a> Usage
 
-# Directory
+### Directory
 
-In the ansible repository specify the spec files with the roles
-and the spec_helper in the spec folder and a dummy test/integration folder.
-the <suite>_spec.rb can just conain a dummy comment.
+In the ansible repository specify:
+
+the spec files with the roles.
+
+the spec_helper in the spec folder and a dummy test/integration folder.
+
+a dummy test/integration/<suite>/ansiblespec/localhost/<suite>_spec.rb containing just a dummy comment.
+
+See example [https://github.com/neillturner/ansible_repo](https://github.com/neillturner/ansible_repo)
 
 ```
 .
@@ -50,8 +58,6 @@ the <suite>_spec.rb can just conain a dummy comment.
                 +-- localhost
                     +-- default_spec.rb   # <suite>_spec.rb
 ```
-
-See example [https://github.com/neillturner/ansible_repo](https://github.com/neillturner/ansible_repo)
 
 
 ## <a name="note"></a> Note
@@ -94,7 +100,9 @@ example:
 
 ## <a name="authors"></a> Authors
 
-Created and maintained by [Neill Turner][author] (<neillwturner@gmail.com>)
+Original busser-serverspec created and maintained by [HIGUCHI Daisuke][author] (<d-higuchi@creationline.com>)
+
+modified by [Neill Turner][author] (<neillwturner@gmail.com>)
 
 ## <a name="license"></a> License
 
