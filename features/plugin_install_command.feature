@@ -4,10 +4,10 @@ Feature: Plugin install command
   I want to run the postinstall for this plugin
 
   Background:
-    Given a test BUSSER_ROOT directory named "busser-serverspec-install"
-    And a sandboxed GEM_HOME directory named "busser-serverspec-gem-home"
+    Given a test BUSSER_ROOT directory named "busser-ansiblespec-install"
+    And a sandboxed GEM_HOME directory named "busser-ansiblespec-gem-home"
 
   Scenario: Running the postinstall generator
-    When I run `busser plugin install busser-serverspec --force-postinstall`
+    When I run `busser plugin install busser-ansiblespec --force-postinstall`
     Then a gem named "serverspec" is installed
     And the exit status should be 0
