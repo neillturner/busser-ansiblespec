@@ -46,11 +46,11 @@ RSpec::Core::RakeTask.new(:spec) do |t|
     '--color',
     '--format documentation',
 #    "--default-path #{base_path}",
-     "--default-path /tmp/kitchen",
+    "--default-path /tmp/kitchen",
   ]
   t.ruby_opts = "-I#{base_path}"
  # t.pattern = "#{base_path}/**/*_spec.rb"
-   t.pattern = '/tmp/kitchen/roles/*/spec/*_spec.rb'
+  t.pattern = '/tmp/kitchen/roles/*/spec/*_spec.rb'
 end
 begin
   Rake::Task['spec'].invoke
