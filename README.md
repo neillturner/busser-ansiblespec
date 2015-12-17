@@ -3,16 +3,16 @@
 [![Gem Version](https://badge.fury.io/rb/busser-ansiblespec.png)](http://rubygems.org/gems/busser-ansiblespec)
 [![Gem Downloads](http://ruby-gem-downloads-badge.herokuapp.com/busser-ansiblespec?type=total&color=brightgreen)](https://rubygems.org/gems/busser-ansiblespec)
 
-A Busser runner plugin for Ansiblespec.
+A Busser runner plugin for Ansible.
 
-This enables testing using the ansiblespec format. The serverspec tests are specified with the roles in the ansible repository.
-Also multple roles can be tested.
+By default this enables testing using the ansiblespec format. The serverspec tests are specified with the roles in the ansible repository.
+* Multiple hosts and multiple roles can be tested.
+* It also supports storing the spec tests in the spec directory and in test-kitchen style test/integration directory.
+* Serverspec using ssh to communicate with the server to be tested.
+* It reads the ansible playbook and inventory files to determine the hosts to test and the roles for each host.
+
 
 See [ansible-sample-tdd](https://github.com/volanja/ansible-sample-tdd)
-
-## <a name="installation"></a> Installation and Setup
-
-Please read the Busser [plugin usage][plugin_usage] page for more details.
 
 ## <a name="usage"></a> Usage
 
@@ -60,28 +60,33 @@ See example [https://github.com/neillturner/ansible_repo](https://github.com/nei
 ```
 
 
-## <a name="note"></a> Note
+## <a name="spec_helper"></a> spec_helper
 
-### <a name="spec"></a> File Matching
-
-Globbing pattern to match files is `"serverspec/*/*_spec.rb"`.
-You need to use `"_spec.rb"` (underscore), not `"-spec.rb"` (minus).
-
-### <a name="serverspec1"></a> Specify Ansiblespec version
-
-If you have to specify serverspec version, you can use Gemfile. Example Gemfile:
-
-```Gemfile
-source 'https://rubygems.org'
-gem 'serverspec', '< 2.0'
 ```
+require 'rubygems'
+require 'bundler/setup'
 
-### <a name="backend"></a> Serverspec backend
+require 'serverspec'
+require 'pathname'
+require 'net/ssh'
 
-It runs on a target server for testing after ssh log in it.
-So you need to specify `set :backend, :exec` not `set :backend, :ssh` (Serverspec v2).
-If you use Serverspec v1, you need to specify `include SpecInfra::Helper::Exec` not `include SpecInfra::Helper::Ssh`.
+ENV['KITCHEN_PATH'] = '/tmp/kitchen'
+ENV['PLAYBOOK'] = 'default.yml'
+ENV['INVENTORY'] = 'hosts'
+ENV['PATTERN'] = 'ansiblespec' # can 'spec' and 'serverspec'
+ENV['SSH_KEY'] =  '/tmp/kitchen/spec/my_private_ssh_key.pem'
+ENV['LOGIN_PASSWORD'] = 'myrootpassword'
 
+RSpec.configure do |config|
+  set :host,  ENV['TARGET_HOST']
+  # ssh via password
+  #set :ssh_options, :user => 'root', :password] = ENV['LOGIN_PASSWORD']
+  # ssh via ssh key
+  set :ssh_options, :user => 'root', :host_key => 'ssh-rsa', :keys => [ ENV['SSH_KEY'] ]
+  set :backend, :ssh
+  set :request_pty, true
+end
+```
 
 ## <a name="development"></a> Development
 
