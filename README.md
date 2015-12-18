@@ -12,6 +12,34 @@ By default this enables testing using the ansiblespec format. The serverspec tes
 * Serverspec using ssh to communicate with the server to be tested.
 * It reads the ansible playbook and inventory files to determine the hosts to test and the roles for each host.
 
+```
+                                                                     TOMCAT SERVERS
+     TEST KITCHEN              ANSIBLE AND SERVERSPEC
+     WORKSTATION               SERVER                             +------------------------+
+                             +-----------------------+            |   +---------+          |
+                             |                       |            |   |Tomcat   |          |
++-------------------+        |                   +---------------->   |         |          |
+|                   |        |                   |   |            |   +---------+          |
+|    Workstation    |        |                   |   |    +------->                        |
+|    test-kitchen   |        |                   |   |    |       |                        |
+|    kitchen-ansible|        |                   |   |    |       |                        |
+|                   |  create|                   |   |    |       +------------------------+
+|     CREATE +--------------->      install      |   |    |
+|                   |  server|      and run      |   |    |
+|     CONVERGE+-------------------->ANSIBLE  +---+   |    |       +------------------------+
+|                   |        |               +-------------------->  +----------+          |
+|                   |        | install and run       |    |       |  |Tomcat    |          |
+|    VERIFY+------------------>Busser-ansiblespec +-------+       |  |          |          |
++-------------------+        |  +                 |  |            |  +----------+          |
+                             |  +--->ServerSpec   +--------------->                        |
+                             |                       |            |                        |
+                             +-----------------------+            |                        |
+                                                                  +------------------------+
+
+
+                   * All connections over SSH
+
+```
 
 See [ansible-sample-tdd](https://github.com/volanja/ansible-sample-tdd)
 
