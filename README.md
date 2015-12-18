@@ -2,6 +2,7 @@
 
 [![Gem Version](https://badge.fury.io/rb/busser-ansiblespec.png)](http://rubygems.org/gems/busser-ansiblespec)
 [![Gem Downloads](http://ruby-gem-downloads-badge.herokuapp.com/busser-ansiblespec?type=total&color=brightgreen)](https://rubygems.org/gems/busser-ansiblespec)
+[![Build Status](https://travis-ci.org/neillturner/busser-ansiblespec.png)](https://travis-ci.org/neillturner/busser-ansiblespec)
 
 A Busser runner plugin for Ansible.
 
