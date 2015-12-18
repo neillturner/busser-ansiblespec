@@ -52,12 +52,13 @@ See example [https://github.com/neillturner/ansible_repo](https://github.com/nei
 ¦           +-- main.yml
 +-- spec
     +-- spec_helper.rb
+    +-- my_private_key.pem
 +-- test
     +-- integration
         +-- default      # name of test-kitchen suite
             +-- ansiblespec
                 +-- config.yml
-                +--my_private_key.pem
+
 ```
 
 
@@ -93,7 +94,7 @@ This goes in directory test/integration/default/ansiblespec  where default is th
   inventory: hosts
   kitchen_path: '/tmp/kitchen'
   pattern: 'ansiblespec'    # or spec or serverspec
-  ssh_key: 'my_private_key.pem'
+  ssh_key: 'spec/my_private_key.pem'
   login_password: 'myrootpassword'
 ```
 ## <a name="development"></a> Development
