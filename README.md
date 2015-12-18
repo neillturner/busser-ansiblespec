@@ -20,11 +20,11 @@ See [ansible-sample-tdd](https://github.com/volanja/ansible-sample-tdd)
 
 In the ansible repository specify:
 
-the spec files with the roles.
+  * spec files with the roles.
 
-the spec_helper in the spec folder and a dummy test/integration folder.
+  * spec_helper in the spec folder (with code as below).
 
-a dummy test/integration/<suite>/ansiblespec/localhost/<suite>_spec.rb containing just a dummy comment.
+  * test/integration/<suite>/ansiblespec containing config.yml and ssh private keys to access the servers.
 
 See example [https://github.com/neillturner/ansible_repo](https://github.com/neillturner/ansible_repo)
 
@@ -55,8 +55,8 @@ See example [https://github.com/neillturner/ansible_repo](https://github.com/nei
     +-- integration
         +-- default      # name of test-kitchen suite
             +-- ansiblespec
-                +-- localhost
-                    +-- default_spec.rb   # <suite>_spec.rb
+                +-- config.yml
+                +--my_private_key.pem
 ```
 
 
@@ -70,24 +70,31 @@ require 'serverspec'
 require 'pathname'
 require 'net/ssh'
 
-ENV['KITCHEN_PATH'] = '/tmp/kitchen'
-ENV['PLAYBOOK'] = 'default.yml'
-ENV['INVENTORY'] = 'hosts'
-ENV['PATTERN'] = 'ansiblespec' # can 'spec' and 'serverspec'
-ENV['SSH_KEY'] =  '/tmp/kitchen/spec/my_private_ssh_key.pem'
-ENV['LOGIN_PASSWORD'] = 'myrootpassword'
-
 RSpec.configure do |config|
   set :host,  ENV['TARGET_HOST']
   # ssh via password
-  #set :ssh_options, :user => 'root', :password] = ENV['LOGIN_PASSWORD']
+  set :ssh_options, :user => 'root', :password => ENV['LOGIN_PASSWORD'] if ENV['LOGIN_PASSWORD']
   # ssh via ssh key
-  set :ssh_options, :user => 'root', :host_key => 'ssh-rsa', :keys => [ ENV['SSH_KEY'] ]
+  set :ssh_options, :user => 'root', :host_key => 'ssh-rsa', :keys => [ ENV['SSH_KEY'] ] if ENV['SSH_KEY']
   set :backend, :ssh
   set :request_pty, true
 end
 ```
 
+## <a name="config.yml"></a> config.yml
+
+This goes in directory test/integration/default/ansiblespec  where default is the name of test-kitchen suite
+
+```
+---
+-
+  playbook: default.yml
+  inventory: hosts
+  kitchen_path: '/tmp/kitchen'
+  pattern: 'ansiblespec'    # or spec or serverspec
+  ssh_key: 'my_private_key.pem'
+  login_password: 'myrootpassword'
+```
 ## <a name="development"></a> Development
 
 * Source hosted at [GitHub][repo]

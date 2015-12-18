@@ -23,15 +23,34 @@ require 'rbconfig'
 require 'yaml'
 
 base_path = File.expand_path(ARGV.shift)
-kitchen_path = '/tmp/kitchen'
-kitchen_path = ENV['KITCHEN_PATH'] if ENV['KITCHEN_PATH']
+f = "#{base_path}/config.yml"
+y = nil
+y = YAML.load_file(f) if File.exist?(f)
+puts "No #{f} found using default values" if !y
 playbook = 'default.yml'
-playbook = ENV['PLAYBOOK'] if ENV['PLAYBOOK']
-hosts = 'hosts'
-hosts = ENV['INVENTORY'] if ENV['INVENTORY']
+playbook = y[0]['playbook'] if y.is_a?(Array) && y[0]['playbook']
+inventoryfile = 'hosts'
+inventoryfile = y[0]['inventory'] if y.is_a?(Array) && y[0]['inventory']
+kitchen_path = '/tmp/kitchen'
+kitchen_path = y[0]['kitchen_path'] if y.is_a?(Array) && y[0]['kitchen_path']
 pattern = 'ansiblespec'
-pattern = ENV['PATTERN'].downcase if ENV['PATTERN']
+pattern = y[0]['pattern'].downcase if y.is_a?(Array) && y[0]['pattern']
+ssh_key = nil
+ssh_key = "#{base_path}/#{y[0]['ssh_key']}" if y.is_a?(Array) && y[0]['ssh_key']
+ENV['SSH_KEY'] = ssh_key if ssh_key
+login_password = nil
+login_password = y[0]['login_password'] if y.is_a?(Array) && y[0]['login_password']
+ENV['LOGIN_PASSWORD'] = login_password if login_password
 
+puts "BASE_PATH: #{base_path}, KITCHEN_PATH #{kitchen_path}, PLAYBOOK: #{playbook}, INVENTORY: #{inventoryfile}, PATTERN: #{pattern}, SSH_KEY: #{ssh_key}, LOGIN_PASSWORD: #{login_password}"
+
+if File.exist?("#{kitchen_path}/#{playbook}") == false
+  puts "Error: #{playbook} is not Found at #{kitchen_path}."
+  exit 1
+elsif File.exist?("#{kitchen_path}/#{inventoryfile}") == false
+  puts "Error: #{inventoryfile} is not Found at #{kitchen_path}."
+  exit 1
+end
 
 playbook_file = YAML.load_file("#{kitchen_path}/#{playbook}")
 properties = {}
@@ -43,7 +62,7 @@ playbook_file.each do |item|
   hostnames = false
   ansible_hosts.each do |h|
     begin
-      `ansible #{h} --list-hosts -i #{kitchen_path}/#{hosts}`.lines do |line|
+      `ansible #{h} --list-hosts -i #{kitchen_path}/#{inventoryfile}`.lines do |line|
         keys += 1
         properties["host_#{keys}"] = {:host => line.strip, :roles => ansible_roles}
         puts "group: #{h} host: #{line.strip!} roles: #{ansible_roles}"
@@ -61,8 +80,6 @@ end
 
 desc "Run serverspec to hosts"
 task :spec => 'serverspec:all'
-
-base_path = File.expand_path(ARGV.shift)
 
 namespace :serverspec do
   task :all => properties.keys.map {|key| 'serverspec:' + key }
