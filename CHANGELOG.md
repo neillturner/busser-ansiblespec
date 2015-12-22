@@ -1,3 +1,11 @@
+## 0.6.1 / 2015-12-22
+
+* Correct location of Gemfile
+
+## 0.6.0 / 2015-12-17
+
+* Lots of changes for ansiblespec
+
 ## 0.5.7 / 2015-06-01
 
 * use RbConfig instead of obsolete and deprecated Config, closes #29

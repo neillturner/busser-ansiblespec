@@ -21,6 +21,6 @@ module Busser
   module Ansiblespec
 
     # Version string for the Serverspec Busser runner plugin
-    VERSION = '0.6.0'
+    VERSION = '0.6.1'
   end
 end

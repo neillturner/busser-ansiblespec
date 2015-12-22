@@ -40,7 +40,7 @@ class Busser::RunnerPlugin::Ansiblespec < Busser::RunnerPlugin::Base
 
   def run_bundle_install
     # Referred from busser-shindo
-    gemfile_path = File.join('/tmp/kitchen', 'spec', 'Gemfile')
+    gemfile_path = File.join(suite_path, 'ansiblespec', 'Gemfile')
     if File.exists?(gemfile_path)
       # Bundle install local completes quickly if the gems are already found
       # locally it fails if it needs to talk to the internet. The || below is

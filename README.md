@@ -125,6 +125,17 @@ This goes in directory test/integration/default/ansiblespec  where default is th
   ssh_key: 'spec/my_private_key.pem'
   login_password: 'myrootpassword'
 ```
+
+## <a name="Gemfile"></a> Gemfile
+
+To add additionl ruby gems create a Gemfile that in directory test/integration/default/ansiblespec
+
+```
+source 'https://rubygems.org'
+
+gem 'rake'
+```
+
 ## <a name="development"></a> Development
 
 * Source hosted at [GitHub][repo]
