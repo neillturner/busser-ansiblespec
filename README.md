@@ -128,7 +128,7 @@ This goes in directory test/integration/default/ansiblespec  where default is th
 
 ## <a name="Gemfile"></a> Gemfile
 
-To add additionl ruby gems create a Gemfile that in directory test/integration/default/ansiblespec
+To add additionl ruby gems create a Gemfile in directory test/integration/default/ansiblespec
 
 ```
 source 'https://rubygems.org'
