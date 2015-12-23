@@ -12,30 +12,26 @@ By default this enables testing using the ansiblespec format. The serverspec tes
 * Serverspec using ssh to communicate with the server to be tested.
 * It reads the ansible playbook and inventory files to determine the hosts to test and the roles for each host.
 
-```
-                                                                     TOMCAT SERVERS
-     TEST KITCHEN              ANSIBLE AND SERVERSPEC
-     WORKSTATION               SERVER                             +------------------------+
-                             +-----------------------+            |   +---------+          |
-                             |                       |            |   |Tomcat   |          |
-+-------------------+        |                   +---------------->   |         |          |
-|                   |        |                   |   |            |   +---------+          |
-|    Workstation    |        |                   |   |    +------->                        |
-|    test-kitchen   |        |                   |   |    |       |                        |
-|    kitchen-ansible|        |                   |   |    |       |                        |
-|                   |  create|                   |   |    |       +------------------------+
-|     CREATE +--------------->      install      |   |    |
-|                   |  server|      and run      |   |    |
-|     CONVERGE+-------------------->ANSIBLE  +---+   |    |       +------------------------+
-|                   |        |               +-------------------->  +----------+          |
-|                   |        | install and run       |    |       |  |Tomcat    |          |
-|    VERIFY+------------------>Busser-ansiblespec +-------+       |  |          |          |
-+-------------------+        |  +                 |  |            |  +----------+          |
-                             |  +--->ServerSpec   +--------------->                        |
-                             |                       |            |                        |
-                             +-----------------------+            |                        |
-                                                                  +------------------------+
-
+     TEST KITCHEN              ANSIBLE AND SERVERSPEC                TOMCAT SERVER
+     WORKSTATION               SERVER (built and destroyed      (created separately
+     (or Jenkins CI)           automatically)                   could be docker container)
+                             +----------------------------+
++-------------------+        |                            |      +-----------------------+
+|   test kitchen    |        |                            |      |                       |
+|   kitchen-ansible | create |                            |      |                       |
+|                   | ser^er |                            |      |      +-----------+    |
+|     CREATE    +------------>               +----------+ |      |      | tomcat    |    |
+|                   |        |               |          | | install     |           |    |
+|                   | install and run        | ansible  +--------------->           |    |
+|     CONVERGE  +------------+--------------->          | | tomcat      +-----------+    |
+|                   |        |               +----------+ |      |                       |
+|                   | install|  +----------+  +---------+ |   test                       |
+|     VERIFY    +--------------->busser-   |-->serverspec--------+---->                  |
+|                   |and run |  |ansiblespec  |         | |      |                       |
+|                   |        |  +----------+  +---------+ |      +-----------------------+
+|     DESTROY   +------------>                            |
++-------------------+ delete +----------------------------+
+                      server
 
                    * All connections over SSH
 
@@ -60,24 +56,24 @@ See example [https://github.com/neillturner/ansible_repo](https://github.com/nei
 ```
 .
 +-- roles
-¦   +-- mariadb
-¦   ¦   +-- spec
-¦   ¦   ¦   +-- mariadb_spec.rb
-¦   ¦   +-- tasks
-¦   ¦   ¦   +-- main.yml
-¦   ¦   +-- templates
-¦   ¦       +-- mariadb.repo
-¦   +-- nginx
-¦       +-- handlers
-¦       ¦   +-- main.yml
-¦       +-- spec
-¦       ¦   +-- nginx_spec.rb
-¦       +-- tasks
-¦       ¦   +-- main.yml
-¦       +-- templates
-¦       ¦   +-- nginx.repo
-¦       +-- vars
-¦           +-- main.yml
+Â¦Â Â  +-- mariadb
+Â¦Â Â  Â¦Â Â  +-- spec
+Â¦Â Â  Â¦Â Â  Â¦Â Â  +-- mariadb_spec.rb
+Â¦Â Â  Â¦Â Â  +-- tasks
+Â¦Â Â  Â¦Â Â  Â¦Â Â  +-- main.yml
+Â¦Â Â  Â¦Â Â  +-- templates
+Â¦Â Â  Â¦Â Â      +-- mariadb.repo
+Â¦Â Â  +-- nginx
+Â¦Â Â      +-- handlers
+Â¦Â Â      Â¦Â Â  +-- main.yml
+Â¦Â Â      +-- spec
+Â¦Â Â      Â¦Â Â  +-- nginx_spec.rb
+Â¦Â Â      +-- tasks
+Â¦Â Â      Â¦Â Â  +-- main.yml
+Â¦Â Â      +-- templates
+Â¦Â Â      Â¦Â Â  +-- nginx.repo
+Â¦Â Â      +-- vars
+Â¦Â Â          +-- main.yml
 +-- spec
     +-- spec_helper.rb
     +-- my_private_key.pem
