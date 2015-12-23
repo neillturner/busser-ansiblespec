@@ -12,6 +12,7 @@ By default this enables testing using the ansiblespec format. The serverspec tes
 * Serverspec using ssh to communicate with the server to be tested.
 * It reads the ansible playbook and inventory files to determine the hosts to test and the roles for each host.
 
+```
      TEST KITCHEN              ANSIBLE AND SERVERSPEC                TOMCAT SERVER
      WORKSTATION               SERVER (built and destroyed      (created separately
      (or Jenkins CI)           automatically)                   could be docker container)
