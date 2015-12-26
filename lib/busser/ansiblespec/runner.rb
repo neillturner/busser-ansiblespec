@@ -36,7 +36,14 @@ kitchen_path = y[0]['kitchen_path'] if y.is_a?(Array) && y[0]['kitchen_path']
 pattern = 'ansiblespec'
 pattern = y[0]['pattern'].downcase if y.is_a?(Array) && y[0]['pattern']
 ssh_key = nil
-ssh_key = "#{kitchen_path}/#{y[0]['ssh_key']}" if y.is_a?(Array) && y[0]['ssh_key']
+if y.is_a?(Array) && y[0]['ssh_key']
+  if y[0]['ssh_key'].start_with?('/') || y[0]['ssh_key'].start_with?('~')
+    ssh_key = y[0]['ssh_key']
+  else
+    # if it was passed in by kitchen-ansible provisioner assume it has been copied to the .ssh directory by the converge
+    y[0]['ssh_key'] = "#{File.join('~/.ssh', File.basename(y[0]['ssh_key'])}"
+  end
+end
 ENV['SSH_KEY'] = ssh_key if ssh_key
 login_password = nil
 login_password = y[0]['login_password'] if y.is_a?(Array) && y[0]['login_password']
