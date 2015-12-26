@@ -103,9 +103,9 @@ RSpec.configure do |config|
   #                https://net-ssh.github.io/ssh/v2/api/classes/Net/SSH/Config.html
   # change user from root if using ubuntu, vagrant etc
   # ssh via password
-  set :ssh_options, :user => 'root', :paranoid => false, :verbose => :error, :password => ENV['LOGIN_PASSWORD'] if ENV['LOGIN_PASSWORD']
+  set :ssh_options, :user => ENV['LOGIN_USER'], :paranoid => false, :verbose => :error, :password => ENV['LOGIN_PASSWORD'] if ENV['LOGIN_PASSWORD']
   # ssh via ssh key
-  set :ssh_options, :user => 'root', :paranoid => false, :verbose => :error, :host_key => 'ssh-rsa', :keys => [ ENV['SSH_KEY'] ] if ENV['SSH_KEY']
+  set :ssh_options, :user => ENV['LOGIN_USER'], :paranoid => false, :verbose => :error, :host_key => 'ssh-rsa', :keys => [ ENV['SSH_KEY'] ] if ENV['SSH_KEY']
   set :backend, :ssh
   set :request_pty, true
 end
@@ -122,6 +122,7 @@ This goes in directory test/integration/default/ansiblespec  where default is th
   inventory: hosts
   kitchen_path: '/tmp/kitchen'
   pattern: 'ansiblespec'    # or spec or serverspec
+  user: root
   ssh_key: 'spec/my_private_key.pem'
   login_password: 'myrootpassword'
 ```

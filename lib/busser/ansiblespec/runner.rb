@@ -35,13 +35,16 @@ kitchen_path = '/tmp/kitchen'
 kitchen_path = y[0]['kitchen_path'] if y.is_a?(Array) && y[0]['kitchen_path']
 pattern = 'ansiblespec'
 pattern = y[0]['pattern'].downcase if y.is_a?(Array) && y[0]['pattern']
+user = 'root'
+user = y[0]['user'].downcase if y.is_a?(Array) && y[0]['user']
+ENV['LOGIN_USER'] = user if user
 ssh_key = nil
 if y.is_a?(Array) && y[0]['ssh_key']
   if y[0]['ssh_key'].start_with?('/') || y[0]['ssh_key'].start_with?('~')
     ssh_key = y[0]['ssh_key']
   else
     # if it was passed in by kitchen-ansible provisioner assume it has been copied to the .ssh directory by the converge
-    y[0]['ssh_key'] = "#{File.join('~/.ssh', File.basename(y[0]['ssh_key'])}"
+    ssh_key = "#{File.join("/home/#{user}/.ssh", File.basename(y[0]['ssh_key']))}"
   end
 end
 ENV['SSH_KEY'] = ssh_key if ssh_key
@@ -49,7 +52,7 @@ login_password = nil
 login_password = y[0]['login_password'] if y.is_a?(Array) && y[0]['login_password']
 ENV['LOGIN_PASSWORD'] = login_password if login_password
 
-puts "BASE_PATH: #{base_path}, KITCHEN_PATH #{kitchen_path}, PLAYBOOK: #{playbook}, INVENTORY: #{inventoryfile}, PATTERN: #{pattern}, SSH_KEY: #{ssh_key}, LOGIN_PASSWORD: #{login_password}"
+puts "BASE_PATH: #{base_path}, KITCHEN_PATH #{kitchen_path}, PLAYBOOK: #{playbook}, INVENTORY: #{inventoryfile}, PATTERN: #{pattern}, LOGIN_USER: #{user}, SSH_KEY: #{ssh_key}, LOGIN_PASSWORD: #{login_password}"
 
 if File.exist?("#{kitchen_path}/#{playbook}") == false
   puts "Error: #{playbook} is not Found at #{kitchen_path}."
