@@ -12,31 +12,8 @@ By default this enables testing using the ansiblespec format. The serverspec tes
 * Serverspec using ssh to communicate with the server to be tested.
 * It reads the ansible playbook and inventory files to determine the hosts to test and the roles for each host.
 
-```
-     TEST KITCHEN              ANSIBLE AND SERVERSPEC                TOMCAT SERVER
-     WORKSTATION               SERVER (built and destroyed      (created separately
-     (or Jenkins CI)           automatically)                   could be docker container)
-                             +----------------------------+
-+-------------------+        |                            |      +-----------------------+
-|   test kitchen    |        |                            |      |                       |
-|   kitchen-ansible | create |                            |      |                       |
-|                   | ser^er |                            |      |      +-----------+    |
-|     CREATE    +------------>               +----------+ |      |      | tomcat    |    |
-|                   |        |               |          | | install     |           |    |
-|                   | install and run        | ansible  +--------------->           |    |
-|     CONVERGE  +------------+--------------->          | | tomcat      +-----------+    |
-|                   |        |               +----------+ |      |                       |
-|                   | install|  +----------+  +---------+ |   test                       |
-|     VERIFY    +--------------->busser-   |-->serverspec--------+---->                  |
-|                   |and run |  |ansiblespec  |         | |      |                       |
-|                   |        |  +----------+  +---------+ |      +-----------------------+
-|     DESTROY   +------------>                            |
-+-------------------+ delete +----------------------------+
-                      server
+![test-kitchen, ansible and busser-ansiblespec](https://github.com/neillturner/ansible_repo/blob/master/kitchen-ansible.png "test-kitchen, ansible and busser-ansiblespec")
 
-                   * All connections over SSH
-
-```
 
 See [ansible-sample-tdd](https://github.com/volanja/ansible-sample-tdd)
 
