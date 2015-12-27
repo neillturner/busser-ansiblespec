@@ -112,6 +112,7 @@ To add additionl ruby gems create a Gemfile in directory test/integration/defaul
 source 'https://rubygems.org'
 
 gem 'rake'
+gem 'busser-ansiblespec', '<=0.6.5'
 ```
 
 ## <a name="development"></a> Development
